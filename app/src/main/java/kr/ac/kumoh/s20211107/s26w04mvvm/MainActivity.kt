@@ -1,5 +1,6 @@
 package kr.ac.kumoh.s20211107.s26w04mvvm
 
+import android.R.attr.onClick
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,7 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.retain.retain
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +55,8 @@ fun MainScreen() {
 fun Counter(
     modifier: Modifier = Modifier
 ) {
-    var count by remember { mutableIntStateOf(0) }
+    var count by rememberSaveable { mutableIntStateOf(0) }
+    var expanded by rememberSaveable { mutableStateOf(false)}
 
     Column(
         modifier = modifier // Modifier 사용하면 윗 여백 없음
@@ -82,20 +87,34 @@ fun Counter(
                 Text("+", fontSize = 30.sp)
             }
 
-            Button(
-                onClick = {
-                    count--
+            if (expanded) {
+                Button(
+                    onClick = {
+                        count--
+                        expanded = false
+                    }
+                ) {
+                    Text("-", fontSize = 30.sp)
                 }
-            ) {
-                Text("-", fontSize = 30.sp)
+
+                Button(
+                    onClick = {
+                        count = 0
+                        expanded = false
+                    }
+                ) {
+                    Text("0", fontSize = 30.sp)
+                }
             }
 
-            Button(
-                onClick = {
-                    count = 0
+            if (!expanded) {
+                Button(
+                    onClick = {
+                        expanded = true
+                    }
+                ) {
+                    Text("...", fontSize = 30.sp)
                 }
-            ) {
-                Text("0", fontSize = 30.sp)
             }
         }
     }
