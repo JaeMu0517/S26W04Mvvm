@@ -25,12 +25,14 @@ import androidx.compose.ui.unit.sp
 fun Counter(
     modifier: Modifier = Modifier,
     count: Int,
-    onChangeCount: (Int) -> Unit,
+    onIncrement: () -> Unit,
+    onDecrement: () -> Unit,
+    onReset: () -> Unit,
 ) {
-    var expanded by retain { mutableStateOf(false)}
+    var expanded by retain { mutableStateOf(false) }
 
     Column(
-        modifier = modifier // Modifier 사용하면 윗 여백 없음
+        modifier = modifier
             .fillMaxSize()
             .padding(8.dp)
             .background(Color(0XFFE9F680)),
@@ -52,7 +54,7 @@ fun Counter(
             Button(
                 modifier = Modifier.weight(1f),
                 onClick = {
-                    onChangeCount(count + 1)
+                    onIncrement()
                 }
             ) {
                 Text("+", fontSize = 30.sp)
@@ -61,7 +63,7 @@ fun Counter(
             if (expanded) {
                 Button(
                     onClick = {
-                        onChangeCount(count - 1)
+                        onDecrement()
                         expanded = false
                     }
                 ) {
@@ -70,14 +72,13 @@ fun Counter(
 
                 Button(
                     onClick = {
-                        onChangeCount(0)
+                        onReset()
                         expanded = false
                     }
                 ) {
                     Text("0", fontSize = 30.sp)
                 }
-            }
-            else {
+            } else {
                 Button(
                     onClick = {
                         expanded = true
